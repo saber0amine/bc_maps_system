@@ -1,78 +1,100 @@
+# Gestion de Lieux
 
-#Architecture
+Application décentralisée pour enregistrer, organiser et partager des lieux favoris (coordonnées GPS, description, tags, image), avec export/import et agrégation multi-serveurs.
+
+
+## Architecture
+
+```text
 ┌─────────────────┐
 │  Client Mobile  │
 │  (Android/iOS)  │
 └────────┬────────┘
-│ HTTP/REST
-│
+         │ HTTP / REST
 ┌────────▼────────┐
 │   Spring Boot   │
-│   REST API      │
+│     REST API    │
 └────────┬────────┘
-│
+         │
 ┌────────▼────────┐
-│   H2/SQLite     │
+│   H2 / SQLite   │
 │   (embarquée)   │
 └─────────────────┘
+````
 
-#Scénarios
-### Scénario 1 : Usage basique
+**Principes clés**
 
-```
-Alice ouvre l'app web
-→ Voit une carte avec ses lieux
-→ Clique "Ajouter un lieu"
+* **Client = agrégateur** : affiche *mes lieux* + *sources externes* (autres serveurs).
+* **Collections automatiques** : 1 tag = 1 collection ; + une collection “Tous”.
+* **Partage via token** avec droits (lecture/écriture) (ACL).
+
+---
+
+## Modèle de données
+
+
+![Modèle de données](src/main/resources/Model_de_donnees_v1.jpeg)
+
+
+---
+
+## Scénarios
+
+### Scénario 1 — Usage basique
+
+```text
+Alice ouvre l’app
+→ Voit la carte avec ses lieux
+→ Clique “Ajouter un lieu”
 → Place un pin sur la carte
-→ Remplit : "Restaurant Le Bistrot", tags: ["Restaurant", "Paris"]
-→ Le lieu apparaît dans 3 collections:
-   - "Tous mes lieux"
-   - "Restaurant" (créée auto)
-   - "Paris" (créée auto)
+→ Renseigne : "Restaurant Le Bistrot"
+   Tags : ["Restaurant", "Paris"]
+→ Le lieu apparaît dans :
+   - Tous mes lieux
+   - Restaurant (créée automatiquement)
+   - Paris (créée automatiquement)
 ```
 
-### Scénario 2 : Export
+### Scénario 2 — Export
 
-```
+```text
 Alice veut utiliser ses restos dans Waze
-→ Va dans collection "Restaurant"
-→ Clique "Exporter"
+→ Ouvre la collection “Restaurant”
+→ Clique “Exporter”
 → Choisit GPX
 → Télécharge le fichier
-→ L'importe dans Waze
+→ Importe dans Waze
 ```
 
-### Scénario 3 : Partage simple
+### Scénario 3 — Partage simple (collection + position courante)
 
-```
-Partage Collection + Postionne Courante :
- 
+```text
 Alice veut montrer ses restos à Bob
-→ Collection "Restaurant" → "Partager"
-→ App génère un token : "xyz789"
-→ App affiche : "https://alice-server.com + token: xyz789"
-→ Alice envoie ça à Bob par WhatsApp
+→ Collection “Restaurant” → “Partager”
+→ L’app génère un token : "xyz789"
+→ L’app affiche : "https://alice-server.com" + token: xyz789
+→ Alice envoie ça à Bob (WhatsApp, etc.)
 
 Bob reçoit le message
-→ Ouvre son app web
-→ Va dans "Ajouter une source"
-→ Colle l'URL et le token
-→ Maintenant Bob voit les restos d'Alice dans sa carte
+→ Ouvre son app
+→ Va dans “Ajouter une source”
+→ Colle l’URL et le token
+→ Bob voit les restos d’Alice sur sa carte
 ```
 
-### Scénario 4 : Partage entre serveurs
+### Scénario 4 — Partage entre serveurs
 
-```
+```text
 Alice (serveur alice.com)
 Bob (serveur bob.com)
 Charlie (serveur charlie.com)
 
-Alice partage ses "Restos Paris" avec Bob
-Bob partage ses "Bars Lyon" avec Charlie
-Charlie partage ses "Musées" avec Alice
+Alice partage ses “Restos Paris” avec Bob
+Bob partage ses “Bars Lyon” avec Charlie
+Charlie partage ses “Musées” avec Alice
 
-Résultat dans l'app d'Alice:
-Carte affichant:
+Résultat chez Alice :
+Carte affichant
 ├── Mes lieux (alice.com)
 │   ├── Restos Paris
 │   └── Mes autres lieux
@@ -80,17 +102,20 @@ Carte affichant:
     └── Musées de Charlie (charlie.com)
 ```
 
-## Interface type
+---
 
-**Vue principale : Carte**
-```
+## Interface
+
+### Vue principale — Carte
+
+```text
 ┌─────────────────────────────────┐
 │ [Menu☰] Gestion Lieux    [+Lieu]│
 ├─────────────────────────────────┤
 │                                 │
-│        🗺️ CARTE                 │
-│     📍 📍   📍                   │
-│   📍     📍                      │
+│        🗺️  CARTE                │
+│     📍  📍   📍                  │
+│   📍      📍                     │
 │                                 │
 ├─────────────────────────────────┤
 │ Collections:                    │
@@ -104,8 +129,9 @@ Carte affichant:
 └─────────────────────────────────┘
 ```
 
-**Fiche d'un lieu**
-```
+### Fiche d’un lieu
+
+```text
 ┌─────────────────────────────────┐
 │ Restaurant Le Bistrot      [×]  │
 ├─────────────────────────────────┤
@@ -124,14 +150,15 @@ Carte affichant:
 └─────────────────────────────────┘
 ```
 
-**Page de partage**
-```
+### Page de partage
+
+```text
 ┌─────────────────────────────────┐
 │ Partager "Restaurant"           │
 ├─────────────────────────────────┤
 │ Générer un nouveau token:       │
 │                                 │
-│ Droits: ○ Lecture ○ Écriture   │
+│ Droits: ○ Lecture  ○ Écriture   │
 │                                 │
 │ [Générer]                       │
 │                                 │
@@ -146,4 +173,4 @@ Carte affichant:
 └─────────────────────────────────┘
 ```
 
-
+```
