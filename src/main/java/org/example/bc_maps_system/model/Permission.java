@@ -25,4 +25,14 @@ public class Permission {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AccessType accessType;
+
+    public UUID getId() { return id; }
+    public Token getToken() { return token; }
+    public void setToken(Token token) { this.token = token; }
+    public ResourceType getResourceType() { return resourceType; }
+    public void setResourceType(ResourceType resourceType) { this.resourceType = resourceType; }
+    public UUID getResourceId() { return resourceId; }
+    public void setResourceId(UUID resourceId) { this.resourceId = resourceId; }
+    public AccessType getAccessType() { return accessType; }
+    public void setAccessType(AccessType accessType) { this.accessType = accessType; }
 }
