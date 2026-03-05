@@ -2,6 +2,9 @@ package org.example.bc_maps_system.model;
 
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +12,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "tags")
+@Data
 public class Tag {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
