@@ -14,7 +14,7 @@ public class Token {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "token_value", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String value;
 
     @ManyToOne(fetch = FetchType.LAZY)
