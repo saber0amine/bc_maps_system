@@ -49,14 +49,4 @@ Créer ExternalSource (id, userId, serverUrl, token, name, isActive, lastSync). 
 ### #14 - Controller CollectionController
 Endpoints: GET /api/collections (lister tags avec count), GET /api/places?tagId={id} (places d'une collection). Appliquer vérifications permissions via PermissionService. Retourner 403 si accès refusé.
 
-
----
-
-## Ordre d'exécution recommandé
-
-**Phase 1** (Karim #1-3 + Binôme #8-9) : Setup + Modèle données  
-**Phase 2** (Karim #4-5 + Binôme #10-11) : Services + Auth  
-**Phase 3** (Karim #6-7 + Binôme #12-13) : Features avancées  
-**Phase 4** (Binôme #14) : Collections + intégration
-
-*Chaque ticket = 2-4h de travail*
+ 
