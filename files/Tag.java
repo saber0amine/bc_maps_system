@@ -1,5 +1,6 @@
 package org.example.bc_maps_system.model;
 
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -13,7 +14,6 @@ import java.util.UUID;
 @Table(name = "tags")
 @Data
 public class Tag {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -36,5 +36,4 @@ public class Tag {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
-
 }
