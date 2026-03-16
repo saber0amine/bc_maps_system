@@ -24,7 +24,7 @@ public class Tag {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "place_tags",
             joinColumns = @JoinColumn(name = "tag_id"),

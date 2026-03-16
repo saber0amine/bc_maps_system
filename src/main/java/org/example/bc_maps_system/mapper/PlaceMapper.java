@@ -25,6 +25,7 @@ public interface PlaceMapper {
 
     @Mapping(target = "userId", expression = "java(place.getUser() != null ? place.getUser().getId().toString() : null)")
     @Mapping(target = "tags", expression = "java(mapTags(place.getTags()))")
+    @Mapping(target = "currentPosition", source = "isCurrentPosition")
     PlaceResponse toResponse(Place place);
 
     @Mapping(target = "id", ignore = true)
