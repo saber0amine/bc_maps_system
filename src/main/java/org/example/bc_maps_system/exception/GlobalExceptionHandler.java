@@ -11,6 +11,26 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(PlaceNotFoundException.class)
+    public ResponseEntity<ErrorEntity> handlePlaceNotFound(PlaceNotFoundException ex) {
+        ErrorEntity error = ErrorEntity.builder()
+                .timeStamp(LocalDateTime.now())
+                .message(ex.getMessage())
+                .httpStatus(HttpStatus.NOT_FOUND.value())
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorEntity> handleUnauthorized(UnauthorizedException ex) {
+        ErrorEntity error = ErrorEntity.builder()
+                .timeStamp(LocalDateTime.now())
+                .message(ex.getMessage())
+                .httpStatus(HttpStatus.FORBIDDEN.value())
+                .build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorEntity> handleIllegalArgument(IllegalArgumentException ex) {
         ErrorEntity error = ErrorEntity.builder()
