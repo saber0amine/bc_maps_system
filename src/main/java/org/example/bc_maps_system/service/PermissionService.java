@@ -8,7 +8,11 @@ import org.example.bc_maps_system.repository.PermissionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PermissionService {
@@ -30,6 +34,36 @@ public class PermissionService {
         if (token.isMasterToken()) return true;
         return hasPermission(token, resourceType, resourceId, AccessType.WRITE)
                 || hasPermission(token, resourceType, resourceId, AccessType.ADMIN);
+    }
+
+    public Set<UUID> getReadableResourceIds(Token token, ResourceType resourceType) {
+        if (token.isMasterToken()) {
+            return Set.of();
+        }
+        return filterResourceIds(token, resourceType, EnumSet.of(AccessType.READ, AccessType.WRITE, AccessType.ADMIN));
+    }
+
+    public Set<UUID> getWritableResourceIds(Token token, ResourceType resourceType) {
+        if (token.isMasterToken()) {
+            return Set.of();
+        }
+        return filterResourceIds(token, resourceType, EnumSet.of(AccessType.WRITE, AccessType.ADMIN));
+    }
+
+    public boolean hasAtLeastOnePermission(Token token) {
+        if (token.isMasterToken()) {
+            return true;
+        }
+        return !permissionRepository.findByTokenId(token.getId()).isEmpty();
+    }
+
+    private Set<UUID> filterResourceIds(Token token, ResourceType resourceType, Set<AccessType> accessTypes) {
+        List<Permission> permissions = permissionRepository.findByTokenId(token.getId());
+        return permissions.stream()
+                .filter(permission -> permission.getResourceType() == resourceType)
+                .filter(permission -> accessTypes.contains(permission.getAccessType()))
+                .map(Permission::getResourceId)
+                .collect(Collectors.toSet());
     }
 
     private boolean hasPermission(Token token, ResourceType resourceType, UUID resourceId, AccessType accessType) {

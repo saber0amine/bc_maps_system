@@ -33,6 +33,7 @@ public class TokenService {
         token.setUser(user);
         token.setDescription(description);
         token.setExpiresAt(expiresAt);
+        token.setMasterToken(false);
 
         return tokenRepository.save(token);
     }
@@ -43,6 +44,10 @@ public class TokenService {
                 .orElseThrow(() -> new RuntimeException("Token not found"));
         token.setRevoked(true);
         tokenRepository.save(token);
+    }
+
+    public Optional<Token> findById(UUID tokenId) {
+        return tokenRepository.findById(tokenId);
     }
 
     public Optional<Token> findByValue(String value) {

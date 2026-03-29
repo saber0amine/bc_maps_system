@@ -9,6 +9,6 @@ import java.util.UUID;
 
 @Repository
 public interface ExternalSourceRepository extends JpaRepository<ExternalSource, UUID> {
-
     List<ExternalSource> findByUserIdAndIsActiveTrue(UUID userId);
+    List<ExternalSource> findByUserIdOrderByCreatedAtDesc(UUID userId);
 }

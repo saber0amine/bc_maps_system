@@ -31,6 +31,7 @@ public class Place {
     @Column(nullable = false, precision = 11, scale = 8)
     private BigDecimal longitude;
 
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
     private Boolean isCurrentPosition = false;

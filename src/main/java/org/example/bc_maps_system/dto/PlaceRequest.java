@@ -25,7 +25,7 @@ public class PlaceRequest {
     @DecimalMax(value =  "180.0", message = "La longitude doit être comprise entre -180 et 180")
     private Double longitude;
 
-    @Size(max = 500, message = "L'URL de l'image ne peut pas dépasser 500 caractères")
+    @Size(max = 2048, message = "L'URL de l'image ne peut pas dépasser 2048 caractères")
     private String imageUrl;
 
     private Set<String> tags;
